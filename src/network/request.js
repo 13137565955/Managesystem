@@ -7,6 +7,7 @@ export function request(config) {
   })
   //2.1  axios请求拦截
   instance.interceptors.request.use(config => {
+    config.headers.Authorization = window.sessionStorage.getItem('token');
     return config
   }, err => {
     console.log(err);
