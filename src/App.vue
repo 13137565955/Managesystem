@@ -5,6 +5,7 @@
 </template>
 
 <script>
+document.title = '电商后台管理系统'
 export default {
   name: "app",
   components: {}

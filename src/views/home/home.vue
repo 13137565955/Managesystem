@@ -10,23 +10,27 @@
     </el-header>
     <el-container>
       <el-aside :width="iscollapse ? '63px' : '200px' ">
-        <div class="leftAnimation" @click="leftAnimation">|||</div>
+        <div  class="leftAnimation" :label="iscollapse" @click="leftAnimation">|||</div>
         <!-- 左侧的布局 -->
+         <!-- 收起动画collapse -->
         <el-menu
           background-color="#333744"
           text-color="#fff"
           active-text-color="#409EFF"
           unique-opened
-          :collapse-transition="false"
+          :collapse-transition="false" 
           :collapse="iscollapse"
+          :router="true"
           >
           <!-- index 绑定后要加‘’是因为他要求传入字符串 -->
-          <el-submenu :index="item.order + '' " v-for="(item,index) in LeftList.data" :key="item.id">
+          <el-submenu  :index="item.order + '' " v-for="(item,index) in LeftList.data" :key="item.id">
             <template slot="title">
               <i class ="iconfont" :class="icons[index]"></i>
               <span>{{item.authName}}</span>
-            </template>            
-              <el-menu-item :index="item2.id + '' " v-for="item2 in item.children" 
+            </template>         
+              <!-- 二级菜单    -->
+              <!-- 不要忘记在前面加 / 然无法跳转 -->
+              <el-menu-item :index=" '/' + item2.path" v-for="item2 in item.children" 
               :key="item2.id">
                 <i class ="el-icon-menu"></i>
                 {{item2.authName}}

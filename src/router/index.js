@@ -22,8 +22,11 @@ const routes = [{
     component: () => import('../views/home/home'),
     children: [{
       path: '/welcome',
-      components: () => import('../views/home/homeChildren/welcome')
-    }],
+      component: () => import('../views/home/homeChildren/welcome')
+    }, {
+      path: '/users',
+      component: () => import('../views/home/homeChildren/userList')
+    }, ],
   }
 ]
 
@@ -33,7 +36,7 @@ const router = new VueRouter({
 //标题 全局守卫
 router.beforeEach((to, from, next) => {
   // 从from跳转到to
-  document.title = to.matched[0].meta.title;
+  // document.title = to.matched[0].meta.title;
   // to将要访问的路径
   // from 代表从哪个路径跳转而来 
   // next 是一个函数，表示放行
