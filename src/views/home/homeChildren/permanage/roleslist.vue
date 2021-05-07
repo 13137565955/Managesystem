@@ -1,12 +1,12 @@
 <template>
   <div>
-    用户列表
+    角色列表
   </div>
 </template>
 
 <script>
 export default {
-  name: 'userList',
+  name: 'roleslist',
   components: {},
 }
 </script>

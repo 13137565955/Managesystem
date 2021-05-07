@@ -25,7 +25,10 @@ const routes = [{
       component: () => import('../views/home/homeChildren/welcome')
     }, {
       path: '/users',
-      component: () => import('../views/home/homeChildren/userList')
+      component: () => import('../views/home/homeChildren/usermanage/userList')
+    }, {
+      path: '/roles',
+      component: () => import('../views/home/homeChildren/permanage/roleslist')
     }, ],
   }
 ]

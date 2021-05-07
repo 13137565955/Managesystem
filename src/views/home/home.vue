@@ -20,8 +20,10 @@
           unique-opened
           :collapse-transition="false" 
           :collapse="iscollapse"
-          :router="true"
+          :router="true"  
+          :default-active="$route.path" 
           >
+          <!-- :default-active=" '/' + saveSessionPath" -->
           <!-- index 绑定后要加‘’是因为他要求传入字符串 -->
           <el-submenu  :index="item.order + '' " v-for="(item,index) in LeftList.data" :key="item.id">
             <template slot="title">
@@ -31,7 +33,7 @@
               <!-- 二级菜单    -->
               <!-- 不要忘记在前面加 / 然无法跳转 -->
               <el-menu-item :index=" '/' + item2.path" v-for="item2 in item.children" 
-              :key="item2.id">
+              :key="item2.id" @click="savePath(item2.path)">
                 <i class ="el-icon-menu"></i>
                 {{item2.authName}}
                 </el-menu-item>
@@ -52,7 +54,10 @@ export default {
   name: 'home',
   components: {},
   created() {
-    this.getasideLeft();
+    this.getasideLeft();   
+  },
+  updated() {
+    this.saveSessionPath = sessionStorage.getItem('savePath');
   },
   data() {
     return {
@@ -61,6 +66,7 @@ export default {
       icons:['icon-users','icon-tijikongjian','icon-shangpin','icon-danju','icon-baobiao'],
       //是否折叠
       iscollapse:false,
+      saveSessionPath:''
     }
   },
   methods: {
@@ -81,6 +87,10 @@ export default {
           this.LeftList = res;
           // console.log(this.LeftList);
         })
+    },
+    //保存路径让二级导航栏显示选中
+    savePath(savePath){
+      sessionStorage.setItem('savePath',savePath);
     }
   },
 }
