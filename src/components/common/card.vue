@@ -11,10 +11,12 @@
         </el-col>
         <el-col :span="4">
           <div class="grid-content bg-purple">
-            <el-button type="primary">添加用户</el-button>
+            <el-button type="primary"><slot name="btn"></slot></el-button>
           </div>
         </el-col>
       </el-row>
+      <el-row><slot name="content"></slot></el-row>
+      <el-row><slot name="footer"></slot></el-row>
     </el-card>
   </div>
 </template>

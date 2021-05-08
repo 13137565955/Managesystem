@@ -17,8 +17,18 @@ import {
   card,
   Row,
   Col,
+  table,
+  tableColumn,
+  Switch,
+  tooltip,
+  pagination,
 } from 'element-ui'
 
+Vue.use(pagination)
+Vue.use(tooltip)
+Vue.use(Switch)
+Vue.use(table)
+Vue.use(tableColumn)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(card)
