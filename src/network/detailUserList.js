@@ -12,7 +12,10 @@ export function getdetailUserList(query, pagenum, pagesize) {
   })
 }
 //该表用户状态请求
-import Axios from "axios";
-export function putdetailState(users, state) {
-  Axios.put('users/' + users + '/state/' + state);
+export function putdetailState(uId, state) {
+  return request({
+    // 记得要加方法是put方法  看清接口拼接方式
+    method: 'put',
+    url: '/users/' + uId + '/state/' + state,
+  })
 }
