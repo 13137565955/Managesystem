@@ -19,10 +19,9 @@
             </el-input>
           </div>
         </el-col>
+        <!-- 添加用户 -->
         <el-col :span="4">
-          <div class="grid-content bg-purple">
-            <el-button type="primary">添加用户</el-button>
-          </div>
+          <add-user @getUserList="getdetailUserList" />
         </el-col>
       </el-row>
       <!-- 表格中的内容 -->
@@ -79,13 +78,15 @@
 </template>
 
 <script>
+//子组件等
+import addUser from "./addUser";
 //公共方法等
 import { formatDate } from "components/common/common";
 //请求网络
 import { getdetailUserList, putdetailState } from "network/detailUserList.js";
 export default {
   name: "userDetail",
-  components: { formatDate, getdetailUserList, putdetailState },
+  components: { addUser, formatDate, getdetailUserList, putdetailState },
   data() {
     return {
       status: 0,
@@ -106,12 +107,7 @@ export default {
     this.getdetailUserList();
   },
   updated() {
-    //时间传转换
-    for (let item of this.detailData) {
-      let date = new Date(item.create_time * 1000);
-      let res = formatDate(date, "yyyy-MM-dd");
-      item.create_time = res;
-    }
+    this.updateTime();
   },
   methods: {
     //监听 pagesize 每页显示几行数据
@@ -155,6 +151,14 @@ export default {
           this.$message.error("获取用户列表失败！！！");
         }
       });
+    },
+    updateTime() {
+      //时间传转换
+      for (let item of this.detailData) {
+        let date = new Date(item.create_time * 1000);
+        let res = formatDate(date, "yyyy-MM-dd");
+        item.create_time = res;
+      }
     },
   },
   filters: {},

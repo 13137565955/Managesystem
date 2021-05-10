@@ -3,6 +3,7 @@ import {
 } from './request'
 export function getdetailUserList(query, pagenum, pagesize) {
   return request({
+    method: 'get',
     url: '/users',
     params: {
       query,
@@ -19,3 +20,16 @@ export function putdetailState(uId, state) {
     url: '/users/' + uId + '/state/' + state,
   })
 }
+// //该表用户状态请求
+// export function putUser(username, password, email, mobile) {
+//   return request({
+//     method: 'post',
+//     url: '/users',
+//     params: {
+//       username,
+//       password,
+//       email,
+//       mobile
+//     }
+//   })
+// }
