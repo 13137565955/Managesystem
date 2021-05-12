@@ -42,16 +42,35 @@
             </el-switch>
           </template>
         </el-table-column>
+        <!-- 修改用户 -->
         <el-table-column prop="address" label="操作" width="210px">
-          <el-tooltip :enterable="false" content="修改用户信息" placement="top">
-            <el-button type="primary" icon="el-icon-edit"></el-button>
-          </el-tooltip>
-          <el-tooltip :enterable="false" content="删除用户" placement="top">
-            <el-button type="danger" icon="el-icon-delete"></el-button>
-          </el-tooltip>
-          <el-tooltip :enterable="false" content="分配权限" placement="top">
-            <el-button type="warning" icon="el-icon-s-tools"></el-button>
-          </el-tooltip>
+          <template v-slot:default="scope">
+            <el-tooltip
+              :enterable="false"
+              content="修改用户信息"
+              placement="top"
+            >
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                @click="changeUser(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip :enterable="false" content="删除用户" placement="top">
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                @click="delUser(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip :enterable="false" content="分配权限" placement="top">
+              <el-button
+                type="warning"
+                icon="el-icon-s-tools"
+                @click="allocation(scope.row)"
+              ></el-button>
+            </el-tooltip>
+          </template>
         </el-table-column>
       </el-table>
       <!-- 下面的翻页部分 -->
@@ -74,19 +93,61 @@
         </el-pagination>
       </div>
     </el-card>
+    <!-- 修改用户弹窗 -->
+    <el-dialog
+      title="修改用户信息"
+      :visible.sync="changedialogVisible"
+      width="50%"
+      @close="dialogclose"
+    >
+      <el-form
+        :model="changeForm"
+        :rules="changerules"
+        ref="changeruleForm"
+        label-width="100px"
+        class="demo-ruleForm"
+        status-icon
+      >
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="changeForm.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="changeForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="mobile">
+          <el-input v-model="changeForm.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="changedialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changevalidate">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改用户状态弹窗 -->
+    <state-user ref="stateUser" :staterow="staterow" />
   </div>
 </template>
 
 <script>
 //子组件等
 import addUser from "./addUser";
+import StateUser from "./stateUser.vue";
 //公共方法等
-import { formatDate } from "components/common/common";
+import { formatDate, checkEmail, checkMobile } from "components/common/common";
 //请求网络
 import { getdetailUserList, putdetailState } from "network/detailUserList.js";
+
 export default {
   name: "userDetail",
-  components: { addUser, formatDate, getdetailUserList, putdetailState },
+  components: {
+    addUser,
+    StateUser,
+    formatDate,
+    checkEmail,
+    checkMobile,
+    getdetailUserList,
+    putdetailState,
+  },
   data() {
     return {
       status: 0,
@@ -100,6 +161,36 @@ export default {
       total: 0,
       state: "",
       detailData: [],
+      // 修改用户
+      changedialogVisible: false,
+      changeForm: {},
+      // 绑定的验证规则
+      changerules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
+          },
+        ],
+        email: [
+          { required: true, message: "请输入邮箱", trigger: "blur" },
+          { validator: checkEmail, trigger: "blur" },
+        ],
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          { validator: checkMobile, trigger: "blur" },
+        ],
+      },
+      changeid: 0,
+      // 修改用户状态
+      staterow: {
+        admin: "",
+        role_name: "",
+        id: 0,
+      },
     };
   },
   created() {
@@ -110,6 +201,62 @@ export default {
     this.updateTime();
   },
   methods: {
+    //修改用户状态数据
+    allocation(row) {
+      this.$refs.stateUser.statedialogVisible = true;
+      this.staterow.admin = row.username;
+      this.staterow.role_name = row.role_name;
+      this.staterow.id = row.id;
+      // console.log(row);
+    },
+    // 点击删除用户操作
+    delUser(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const { data: res } = await this.$http.delete(`users/${id}`);
+          if (res.meta.status != 200) this.$message.error("删除用户失败！");
+          this.getdetailUserList();
+          this.$message.success("删除用户成功！");
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    // 点击修改用户确定时修改用户数据
+    changevalidate() {
+      this.$refs.changeruleForm.validate(async (valid) => {
+        // console.log(valid);
+        if (valid) {
+          await this.$http.put(`users/${this.changeid}`, this.changeForm);
+          this.$message.success("修改用户成功！");
+        } else {
+          this.$message.error("修改用户失败！");
+        }
+      });
+      this.changedialogVisible = false;
+      this.getdetailUserList();
+    },
+    //监听修改用户关闭窗口 重置内容
+    dialogclose() {
+      this.$refs.changeruleForm.resetFields();
+      this.getdetailUserList();
+    },
+    // 监听修改用户操作
+    async changeUser(id) {
+      this.changedialogVisible = true;
+      this.changeid = id;
+      const { data: res } = await this.$http.get(`users/${id}`);
+      if (res.meta.status != 200) return;
+      this.changeForm = res.data;
+      // console.log(this.changeForm);
+    },
     //监听 pagesize 每页显示几行数据
     handleSizeChange(newsize) {
       this.totalData.pagesize = newsize;

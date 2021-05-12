@@ -41,31 +41,10 @@
 </template>
 
 <script>
-import { putUser } from "network/detailUserList";
+import { checkEmail, checkMobile } from "components/common/common";
 export default {
   name: "addUser",
   data() {
-    // 自定义验证规则
-    // 验证邮箱的规则
-    var checkEmail = (rule, value, cb) => {
-      // 验证邮箱的正则表达式
-      const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-      if (regEmail.test(value)) {
-        // 合法的邮箱
-        return cb();
-      }
-      cb(new Error("请输入合法的邮箱"));
-    };
-
-    // 验证手机号的规则
-    var checkMobile = (rule, value, cb) => {
-      // 验证手机号的正则表达式
-      const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-      if (regMobile.test(value)) {
-        return cb();
-      }
-      cb(new Error("请输入合法的手机号"));
-    };
     return {
       // 点击显示隐藏表单
       dialogVisible: false,
@@ -112,20 +91,6 @@ export default {
     dialogclose() {
       this.$refs.ruleForm.resetFields();
     },
-    // // //点击按钮  添加用户
-    // addUsers() {
-    //   this.$refs.ruleForm.validate((res) => {
-    //     // console.log(res);
-    //     if (!res) {
-    //       this.$message.error("添加用户失败");
-    //     } else {
-    //       // 网络请求
-    //       putUser(this.addForm).then((res) => {
-    //         console.log(res);
-    //       });
-    //     }
-    //   });
-    // },
     // 点击按钮，添加新用户
     addUsers() {
       this.$refs.ruleForm.validate(async (valid) => {
@@ -146,7 +111,7 @@ export default {
       });
     },
   },
-  // components: { putUser },
+  components: { checkEmail, checkMobile },
 };
 </script>
 
