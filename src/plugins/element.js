@@ -26,8 +26,10 @@ import {
   MessageBox,
   Select,
   Option,
+  tag,
 } from 'element-ui'
 
+Vue.use(tag)
 Vue.use(Option)
 Vue.use(Select)
 Vue.use(dialog)

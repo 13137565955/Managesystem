@@ -29,6 +29,9 @@ const routes = [{
     }, {
       path: '/roles',
       component: () => import('../views/home/homeChildren/permanage/roleslist')
+    }, {
+      path: '/rights',
+      component: () => import('../views/home/homeChildren/permanage/permissionsList')
     }, ],
   }
 ]
