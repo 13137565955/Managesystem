@@ -7,7 +7,7 @@
     </breadcrumb>
     <!-- 卡片中的内容 -->
     <el-card class="box-card">
-      <el-button type="primary">添加角色</el-button>
+      <el-button type="primary" @click="addRole">添加角色</el-button>
       <el-table :data="rolesData" border stripe>
         <!-- 展开列表 -->
         <el-table-column type="expand">
@@ -25,7 +25,9 @@
               :key="item.id"
             >
               <el-col :span="5" class="center">
-                <el-tag closable>{{ item.authName }}</el-tag>
+                <el-tag closable @close="delitem(scope.row, item.id)">{{
+                  item.authName
+                }}</el-tag>
                 <i class="el-icon-caret-right"></i>
               </el-col>
               <el-col :span="19">
@@ -37,9 +39,12 @@
                   :key="item2.id"
                 >
                   <el-col :span="6">
-                    <el-tag type="success" closable>{{
-                      item2.authName
-                    }}</el-tag>
+                    <el-tag
+                      type="success"
+                      closable
+                      @close="delitem(scope.row, item2.id)"
+                      >{{ item2.authName }}</el-tag
+                    >
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <el-col :span="18">
@@ -48,6 +53,7 @@
                       closable
                       v-for="item3 in item2.children"
                       :key="item3.id"
+                      @close="delitem(scope.row, item3.id)"
                       >{{ item3.authName }}</el-tag
                     >
                   </el-col>
@@ -65,13 +71,13 @@
             <el-button
               type="primary"
               icon="el-icon-edit"
-              @click="changeUser(scope.row.id)"
+              @click="editorRole(scope.row)"
               >编辑</el-button
             >
             <el-button
               type="danger"
               icon="el-icon-delete"
-              @click="delUser(scope.row.id)"
+              @click="delrole(scope.row.id)"
               >删除</el-button
             >
             <el-button
@@ -84,23 +90,96 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <!-- 添加角色弹窗 -->
+    <addrole ref="addRole" />
+    <!-- 编辑角色弹窗 -->
+    <editor-role ref="editorRole" :editor="editor" />
   </div>
 </template>
 
 <script>
 import Breadcrumb from "components/common/Breadcrumb";
+import Addrole from "./children/addrole.vue";
+import EditorRole from "./children/editorRole.vue";
 export default {
   name: "roleslist",
-  components: { Breadcrumb },
+  components: { Breadcrumb, Addrole, EditorRole },
   data() {
     return {
       rolesData: [],
+      editor: { id: 0, roleName: "", roleDesc: "" },
     };
   },
   created() {
     this.getrolesList();
   },
   methods: {
+    // 编辑角色
+    editorRole(row) {
+      // console.log(row);
+      this.editor.id = row.id;
+      this.editor.roleName = row.roleName;
+      this.editor.roleDesc = row.roleDesc;
+      // console.log(this.editor);
+      this.$refs.editorRole.editorRoleVisible = true;
+    },
+    // 删除角色
+    async delrole(id) {
+      this.$confirm("此操作将永久删除此角色, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const { data: res } = await this.$http.delete(`roles/${id}`);
+          if (res.meta.status != 200)
+            return this.$message.error("删除角色失败！");
+          this.$message.success("删除角色成功！");
+          this.getrolesList();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    // 添加角色弹窗
+    addRole() {
+      this.$refs.addRole.addRoleVisible = true;
+    },
+    // 删除三级标签权限
+    delitem(role, item3) {
+      this.$confirm("此操作将永久删除该权限, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          // console.log(role.id, item3);
+          const { data: res } = await this.$http.delete(
+            `roles/${role.id}/rights/${item3}`
+          );
+          // console.log(res);
+          if (res.meta.status != 200)
+            return this.$message({
+              type: "error",
+              message: "删除失败!",
+            });
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+
+          role.children = res.data;
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
     // 网络请求权限列表
     async getrolesList() {
       const { data: res } = await this.$http.get("roles");

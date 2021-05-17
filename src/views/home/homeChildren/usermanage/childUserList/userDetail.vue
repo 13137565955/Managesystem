@@ -218,9 +218,16 @@ export default {
       })
         .then(async () => {
           const { data: res } = await this.$http.delete(`users/${id}`);
-          if (res.meta.status != 200) this.$message.error("删除用户失败！");
-          this.getdetailUserList();
-          this.$message.success("删除用户成功！");
+          if (res.meta.status != 200) {
+            if (res.meta.status == 401)
+              this.$message.error("权限不足，无法删除用户！");
+            else {
+              this.$message.error("删除用户失败！");
+            }
+          } else {
+            this.getdetailUserList();
+            this.$message.success("删除用户成功！");
+          }
         })
         .catch(() => {
           this.$message({

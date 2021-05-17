@@ -36,7 +36,8 @@ body,
 #app {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: calc(100vh );
+  min-width: 1500px;
 }
 
 a {
@@ -71,6 +72,6 @@ a {
 .el-table {
   margin-top: 20px;
 }
-.el-pagination{
+.el-pagination {
   margin-top: 20px;
 }
