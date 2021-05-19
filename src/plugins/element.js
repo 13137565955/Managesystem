@@ -27,8 +27,10 @@ import {
   Select,
   Option,
   tag,
+  tree,
 } from 'element-ui'
 
+Vue.use(tree)
 Vue.use(tag)
 Vue.use(Option)
 Vue.use(Select)

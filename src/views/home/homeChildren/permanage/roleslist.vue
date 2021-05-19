@@ -83,7 +83,7 @@
             <el-button
               type="warning"
               icon="el-icon-s-tools"
-              @click="allocation(scope.row)"
+              @click="assignpermission(scope.row)"
               >分配权限</el-button
             >
           </template>
@@ -94,6 +94,8 @@
     <addrole ref="addRole" />
     <!-- 编辑角色弹窗 -->
     <editor-role ref="editorRole" :editor="editor" />
+    <!-- 分配角色权限弹窗 -->
+    <assign-permission ref="assignpermission" :assignRloeId="assignRloeId" />
   </div>
 </template>
 
@@ -101,19 +103,35 @@
 import Breadcrumb from "components/common/Breadcrumb";
 import Addrole from "./children/addrole.vue";
 import EditorRole from "./children/editorRole.vue";
+import AssignPermission from "./children/assignPermission.vue";
 export default {
   name: "roleslist",
-  components: { Breadcrumb, Addrole, EditorRole },
+  components: { Breadcrumb, Addrole, EditorRole, AssignPermission },
   data() {
     return {
+      // 角色列表数据
       rolesData: [],
       editor: { id: 0, roleName: "", roleDesc: "" },
+      // 点击分配权限的角色ID
+      assignRloeId: "",
     };
   },
   created() {
     this.getrolesList();
   },
   methods: {
+    // 点击分配权限
+    assignpermission(row) {
+      // 吧ID赋值
+      this.assignRloeId = row.id;
+      this.$refs.assignpermission.getassign();
+      // 吧三级权限id加进去
+      this.$refs.assignpermission.getdefkeys(
+        row,
+        this.$refs.assignpermission.defkeys
+      );
+      this.$refs.assignpermission.assignVisible = true;
+    },
     // 编辑角色
     editorRole(row) {
       // console.log(row);

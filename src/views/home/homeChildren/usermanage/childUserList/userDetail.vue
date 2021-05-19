@@ -124,7 +124,7 @@
       </span>
     </el-dialog>
     <!-- 修改用户状态弹窗 -->
-    <state-user ref="stateUser" :staterow="staterow" />
+    <state-user ref="stateUser" :staterow="staterow" :allRole="allRole" />
   </div>
 </template>
 
@@ -191,6 +191,8 @@ export default {
         role_name: "",
         id: 0,
       },
+      // 所有角色的数据
+      allRole: [],
     };
   },
   created() {
@@ -201,8 +203,15 @@ export default {
     this.updateTime();
   },
   methods: {
-    //修改用户状态数据
-    allocation(row) {
+    //修改用户状态数据 用户角色
+    async allocation(row) {
+      // 在展示对话框之前，获取所有角色的列表
+      const { data: res } = await this.$http.get("roles");
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取角色列表失败！");
+      }
+      this.allRole = res.data;
+      // console.log(this.allRole);
       this.$refs.stateUser.statedialogVisible = true;
       this.staterow.admin = row.username;
       this.staterow.role_name = row.role_name;
