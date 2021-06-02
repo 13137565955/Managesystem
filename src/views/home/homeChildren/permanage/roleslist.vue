@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 顶部面包屑 -->
+    <!-- 顶部面包屑的实现 -->
     <breadcrumb>
       <template v-slot:one>权限管理</template>
       <template v-slot:two>角色列表</template>
