@@ -2,7 +2,9 @@
   <div>
     <el-card class="box-card">
       <!-- 顶部搜索等 -->
-      <el-row :gutter="20">
+      <el-row :gutter="20"
+        >'
+        <!-- 搜索框 -->
         <el-col :span="7">
           <div class="grid-content bg-purple">
             <el-input

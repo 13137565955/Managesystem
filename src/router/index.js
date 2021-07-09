@@ -32,7 +32,10 @@ const routes = [{
     }, {
       path: '/rights',
       component: () => import('../views/home/homeChildren/permanage/permissionsList')
-    }, ],
+    }, {
+      path: '/goods',
+      component: () => import('../views/home/homeChildren/shopManage/shopList')
+    }],
   }
 ]
 
