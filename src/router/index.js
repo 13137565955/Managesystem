@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
-
+// 懒加载
 const routes = [{
     path: '',
     redirect: '/login',
@@ -22,20 +22,20 @@ const routes = [{
     component: () => import('../views/home/home'),
     children: [{
       path: '/welcome',
-      component: () => import('../views/home/homeChildren/welcome')
+      component: () => import('../views/home/welcome')
     }, {
       path: '/users',
-      component: () => import('../views/home/homeChildren/usermanage/userList')
+      component: () => import('../views/home/usermanage/userList')
     }, {
       path: '/roles',
-      component: () => import('../views/home/homeChildren/permanage/roleslist')
+      component: () => import('../views/home/permanage/roleslist')
     }, {
       path: '/rights',
-      component: () => import('../views/home/homeChildren/permanage/permissionsList')
+      component: () => import('../views/home/permanage/permissionsList')
     }, {
       path: '/goods',
-      component: () => import('../views/home/homeChildren/shopManage/shopList')
-    }],
+      component: () => import('../views/home/shopManage/shopList')
+    }, ],
   }
 ]
 

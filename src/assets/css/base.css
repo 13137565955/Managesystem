@@ -34,10 +34,11 @@ body {
 html,
 body,
 #app {
+  height: 100vh;
+  min-width: 1500px;
   margin: 0;
   padding: 0;
-  height: calc(100vh );
-  min-width: 1500px;
+  overflow: hidden;
 }
 
 a {

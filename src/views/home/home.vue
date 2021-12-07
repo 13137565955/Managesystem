@@ -26,7 +26,7 @@
           :default-active="$route.path"
         >
           <!-- :default-active=" '/' + saveSessionPath" -->
-          <!-- index 绑定后要加‘’是因为他要求传入字符串 -->
+          <!-- index 绑定后要加''是因为他要求传入字符串 -->
           <el-submenu
             :index="item.order + ''"
             v-for="(item, index) in LeftList.data"
@@ -138,10 +138,11 @@ export default {
 }
 .el-container {
   height: 100%;
-  background-color: #333744;
+  background-color: #eaedf1;
 }
 .el-main {
   background-color: #eaedf1;
+  margin-bottom: 60px;
 }
 .iconfont {
   margin-right: 10px;
@@ -158,5 +159,9 @@ export default {
 }
 .el-menu {
   border-right: 0;
+}
+.el-aside {
+  height: 100%;
+  background: #333744;
 }
 </style>
