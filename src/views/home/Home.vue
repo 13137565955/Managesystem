@@ -24,7 +24,11 @@
           :default-active="activePath"
         >
           <!-- 一级菜单 -->
-          <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
+          <el-submenu
+            :index="item.id + ''"
+            v-for="item in menuList"
+            :key="item.id"
+          >
             <!-- 一级菜单的模板区域 -->
             <template slot="title">
               <!-- 图标 -->
@@ -33,7 +37,12 @@
               <span>{{ item.authName }}</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item :index="'/' + sunItem.path" v-for="sunItem in item.children" :key="sunItem.id" @click="saveActivePath('/' + sunItem.path)">
+            <el-menu-item
+              :index="'/' + sunItem.path"
+              v-for="sunItem in item.children"
+              :key="sunItem.id"
+              @click="saveActivePath('/' + sunItem.path)"
+            >
               <template slot="title">
                 <!-- 二级菜单的模板区域 -->
                 <i class="el-icon-menu"></i>
@@ -68,7 +77,7 @@ export default {
         103: 'iconfont icon-tijikongjian',
         101: 'iconfont icon-shangpin',
         102: 'iconfont icon-danju',
-        145: 'iconfont icon-baobiao'
+        145: 'iconfont icon-baobiao',
       },
       isCollapse: false, // 是否折叠属性
       activePath: '',
@@ -83,10 +92,10 @@ export default {
             id: 124,
             order: 1,
             path: 'welcome',
-            children: []
-          }
-        ]
-      }
+            children: [],
+          },
+        ],
+      },
     }
   },
   created() {
@@ -115,8 +124,8 @@ export default {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
       // console.log(this.$route.path)
-    }
-  }
+    },
+  },
 }
 </script>
 
