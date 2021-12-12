@@ -5,14 +5,11 @@
 </template>
 
 <script>
-document.title = '电商后台管理系统'
 export default {
-  name: "app",
-  components: {}
-};
+  name: 'app'
+}
 </script>
 
-<style>
-@import "assets/css/base.css";
-@import "assets/fonts/iconfont.css";
+<style lang="less" scoped>
+@import '~assets/css/base.css';
 </style>

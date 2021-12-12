@@ -1,16 +1,15 @@
+const { tap } = require('lodash')
+
 module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        'assets': '@/assets',
+        'assets':'@/assets',
         'common': '@/common',
         'components': '@/components',
-        'network': '@/network',
         'views': '@/views',
+        'network': '@/network',  
       }
-    },
-    devServer: {
-      // host: '192.168.0.102',
-    },
-  }
+    }
+  },
 }
