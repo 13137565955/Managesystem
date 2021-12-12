@@ -6,18 +6,33 @@
         <img src="~assets/logo.png" alt="" />
       </div>
       <!--      表单提交区域-->
-      <el-form :rules="loginFormRules" ref="loginFormRef" label-width="0px" class="login_form" :model="loginForm">
+      <el-form
+        :rules="loginFormRules"
+        ref="loginFormRef"
+        label-width="0px"
+        class="login_form"
+        :model="loginForm"
+      >
         <!--        用户名-->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
+          <el-input
+            v-model="loginForm.username"
+            prefix-icon="iconfont icon-user"
+          ></el-input>
         </el-form-item>
         <!--        密码-->
         <el-form-item prop="password">
-          <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-3702mima"></el-input>
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            prefix-icon="iconfont icon-3702mima"
+          ></el-input>
         </el-form-item>
         <!--        按钮区-->
         <el-form-item class="btns">
-          <el-button type="primary" @click="login" :loading="loginLoading">登录</el-button>
+          <el-button type="primary" @click="login" :loading="loginLoading"
+            >登录</el-button
+          >
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -34,20 +49,30 @@ export default {
       loginForm: {
         // 登录的表单数据的绑定对象
         username: 'admin',
-        password: '123456'
+        password: '123456',
       },
       loginFormRules: {
         // 验证用户名是否合法
         username: [
           { required: true, message: '请输入登录名称', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          {
+            min: 3,
+            max: 10,
+            message: '长度在 3 到 10 个字符',
+            trigger: 'blur',
+          },
         ],
         // 验证密码是否合法
         password: [
           { required: true, message: '请输入登录密码', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
-        ]
-      }
+          {
+            min: 6,
+            max: 15,
+            message: '长度在 6 到 15 个字符',
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   methods: {
@@ -58,7 +83,7 @@ export default {
     },
     login() {
       this.loginLoading = true
-      this.$refs.loginFormRef.validate(async valid => {
+      this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) {
           return (this.loginLoading = false)
         }
@@ -76,15 +101,15 @@ export default {
         this.$router.push('/home')
         this.loginLoading = false
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
 .login_container {
   height: 100%;
-  background-color: #5dbe8a;
+  background: url(../../assets/bk.jpg) no-repeat center center / 100%;
 }
 .login_box {
   position: absolute;

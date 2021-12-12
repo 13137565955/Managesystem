@@ -3,12 +3,12 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="~assets/manager.jpg" alt="" />
+        <img src="~assets/logo.png" alt="" />
         <span>电商后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
-    <el-container>
+    <el-container class="el-container">
       <!-- 侧边栏 -->
       <el-aside :width="isCollapse ? '61px' : '200px'">
         <div class="toggle-button" @click="toggleCollpase">|||</div>
@@ -114,7 +114,7 @@ export default {
       this.$message.success(res.meta.msg)
       res.data.unshift(this.welcome)
       this.menuList = res.data
-      console.log(res, 'menus')
+      // console.log(res, 'menus')
     },
     // 点击按钮,切换菜单的折叠和展开
     toggleCollpase() {
@@ -184,5 +184,8 @@ export default {
   color: #fff;
   letter-spacing: 0.2em;
   cursor: pointer;
+}
+.el-container {
+  overflow: auto;
 }
 </style>
